@@ -39,10 +39,10 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 
 /* NAV */
 nav{
-  position:fixed;top:0;left:0;right:0;z-index:100;
-  padding:16px clamp(20px,4vw,56px);
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  padding:14px clamp(20px,4vw,56px);
   display:flex;justify-content:space-between;align-items:center;
-  background:rgba(7,5,26,0.92);backdrop-filter:blur(20px);
+  background:rgba(7,5,26,0.95);backdrop-filter:blur(20px);
   border-bottom:1px solid var(--border);
 }
 .nav-logo{display:flex;align-items:center;gap:10px;}
@@ -54,9 +54,55 @@ nav{
 }
 .nav-name{font-size:14px;font-weight:700;color:var(--white);letter-spacing:-.02em;}
 .nav-name span{color:var(--pink);}
+
+/* DESKTOP NAV LINKS */
+.nav-links{
+  display:flex;align-items:center;gap:6px;
+}
+.nav-link{
+  font-size:12px;font-weight:600;color:var(--muted);
+  text-decoration:none;padding:7px 14px;border-radius:8px;
+  transition:all .2s;white-space:nowrap;
+}
+.nav-link:hover{color:var(--white);background:rgba(255,255,255,0.06);}
+
+.nav-right{display:flex;align-items:center;gap:12px;}
 .live-dot{display:flex;align-items:center;gap:6px;font-size:10px;font-weight:700;color:var(--mint);text-transform:uppercase;letter-spacing:.06em;}
 .dot-anim{width:7px;height:7px;border-radius:50%;background:var(--mint);animation:pulse 2s ease infinite;flex-shrink:0;}
 @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+
+/* HAMBURGER */
+.hamburger{
+  display:none;flex-direction:column;justify-content:center;
+  gap:5px;background:none;border:none;cursor:pointer;
+  padding:6px;border-radius:8px;
+  transition:background .2s;
+}
+.hamburger:hover{background:rgba(255,255,255,0.06);}
+.ham-bar{width:22px;height:2px;background:var(--white);border-radius:2px;transition:all .25s;}
+
+/* MOBILE MENU */
+.mobile-menu{
+  display:none;
+  position:fixed;top:63px;left:0;right:0;z-index:199;
+  background:rgba(7,5,26,0.98);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  padding:12px 20px 20px;
+  flex-direction:column;gap:4px;
+}
+.mobile-menu.open{display:flex;}
+.mobile-link{
+  font-size:15px;font-weight:600;color:var(--muted2);
+  text-decoration:none;padding:14px 16px;border-radius:12px;
+  transition:all .2s;display:flex;align-items:center;gap:12px;
+  border:1px solid transparent;
+}
+.mobile-link:hover,.mobile-link:active{color:var(--white);background:rgba(255,255,255,0.05);border-color:var(--border);}
+.mobile-link-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.ml-pink{background:var(--pink);}
+.ml-gold{background:var(--gold);}
+.ml-mint{background:var(--mint);}
+.ml-peach{background:var(--peach);}
 
 /* HERO */
 .hero{
@@ -354,6 +400,8 @@ footer{
 
 /* =================== MOBILE RESPONSIVE =================== */
 @media(max-width:768px){
+  .nav-links{display:none;}
+  .hamburger{display:flex;}
   .hero-bottom{grid-template-columns:1fr;}
   .hero-cards{display:none;}
   .kpi-grid{grid-template-columns:1fr 1fr;}
@@ -369,6 +417,8 @@ footer{
   .pitch-stats{grid-template-columns:1fr 1fr;}
   footer{flex-direction:column;gap:20px;align-items:flex-start;}
   .footer-meta{text-align:left;}
+  section{padding:40px 20px;}
+  .kpi-grid{padding:32px 20px;}
 }
 
 @media(max-width:480px){
@@ -376,6 +426,13 @@ footer{
   .hero-stats{gap:24px;}
   .pitch-stats{grid-template-columns:1fr 1fr;}
   .cap-col,.cap-cell{padding:10px 8px;}
+}
+
+/* DESKTOP TIGHTER */
+@media(min-width:769px){
+  section{padding:64px clamp(20px,4vw,56px);}
+  .kpi-grid{padding:40px clamp(20px,4vw,56px);}
+  .hero{padding:110px clamp(20px,4vw,56px) 64px;}
 }
 </style>
 </head>
@@ -387,8 +444,29 @@ footer{
     <div class="nav-mark">NF</div>
     <div class="nav-name">Naked <span>Foreal</span></div>
   </div>
-  <div class="live-dot"><div class="dot-anim"></div>Live Data</div>
+  <div class="nav-links">
+    <a class="nav-link" href="#top-pin">Top Pin</a>
+    <a class="nav-link" href="#why-we-win">Why We Win</a>
+    <a class="nav-link" href="#the-engine">The Engine</a>
+    <a class="nav-link" href="#capabilities">Capabilities</a>
+  </div>
+  <div class="nav-right">
+    <div class="live-dot"><div class="dot-anim"></div>Live Data</div>
+    <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
+      <div class="ham-bar" id="bar1"></div>
+      <div class="ham-bar" id="bar2"></div>
+      <div class="ham-bar" id="bar3"></div>
+    </button>
+  </div>
 </nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a class="mobile-link" href="#top-pin" onclick="closeMenu()"><span class="mobile-link-dot ml-pink"></span>Top Pin</a>
+  <a class="mobile-link" href="#why-we-win" onclick="closeMenu()"><span class="mobile-link-dot ml-gold"></span>Why We Win</a>
+  <a class="mobile-link" href="#the-engine" onclick="closeMenu()"><span class="mobile-link-dot ml-mint"></span>The Engine</a>
+  <a class="mobile-link" href="#capabilities" onclick="closeMenu()"><span class="mobile-link-dot ml-peach"></span>Capabilities</a>
+</div>
 
 <!-- HERO -->
 <section class="hero">
@@ -411,7 +489,7 @@ footer{
       </a>
 
       <!-- TOP PIN CARD -->
-      <div style="margin-top:24px;max-width:400px;">
+      <div id="top-pin" style="margin-top:24px;max-width:400px;scroll-margin-top:80px;">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;gap:8px;">
           <span style="width:16px;height:1px;background:var(--pink);display:inline-block;flex-shrink:0;"></span>
           Our #1 Performing Pin
@@ -547,7 +625,7 @@ footer{
 </section>
 
 <!-- WHY WE WIN -->
-<section>
+<section id="why-we-win" style="scroll-margin-top:63px;">
   <div class="eyebrow ey-mint">Why We Win</div>
   <h2 class="section-title">Three unfair<br><span style="color:var(--gold);">advantages.</span></h2>
   <div class="insight-grid">
@@ -570,7 +648,7 @@ footer{
 </section>
 
 <!-- ENGINE -->
-<section>
+<section id="the-engine" style="scroll-margin-top:63px;">
   <div class="eyebrow ey-pink">The System</div>
   <h2 class="section-title">How the<br><span style="color:var(--pink);">engine</span> works.</h2>
   <div class="engine-wrap">
@@ -617,7 +695,7 @@ footer{
 </section>
 
 <!-- CAPABILITY TABLE -->
-<section>
+<section id="capabilities" style="scroll-margin-top:63px;">
   <div class="eyebrow ey-gold">Capability Matrix</div>
   <h2 class="section-title">Where we win<br><span style="color:var(--gold);">every time.</span></h2>
   <div class="cap-table">
@@ -662,5 +740,30 @@ footer{
   </div>
 </footer>
 
+<script>
+function toggleMenu(){
+  var m=document.getElementById('mobileMenu');
+  var b1=document.getElementById('bar1');
+  var b2=document.getElementById('bar2');
+  var b3=document.getElementById('bar3');
+  var open=m.classList.toggle('open');
+  if(open){
+    b1.style.transform='translateY(7px) rotate(45deg)';
+    b2.style.opacity='0';
+    b3.style.transform='translateY(-7px) rotate(-45deg)';
+  } else {
+    b1.style.transform='none';
+    b2.style.opacity='1';
+    b3.style.transform='none';
+  }
+}
+function closeMenu(){
+  var m=document.getElementById('mobileMenu');
+  m.classList.remove('open');
+  document.getElementById('bar1').style.transform='none';
+  document.getElementById('bar2').style.opacity='1';
+  document.getElementById('bar3').style.transform='none';
+}
+</script>
 </body>
 </html>
